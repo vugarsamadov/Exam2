@@ -1,0 +1,22 @@
+﻿@model GenericPaginatedEntity<AboutItemVM>
+
+    <a asp-action="Create" class="btn btn-success">Create</a>
+
+    @section scripts
+    {
+        <script>
+        $("#dynamicarea").on("click", ".page-item a", function (ev) {
+                
+                ev.preventDefault();
+
+                var url = $(this).attr('href');
+
+                fetch(url).then(a => a.text())
+                    .then(a => $('#dynamicarea').html(a));
+            });
+        </script>
+    }
+
+    <div id="dynamicarea">
+        <partial name="PartialPaginated" model="Model"></partial>
+    </div>

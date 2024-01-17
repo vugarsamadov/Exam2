@@ -1,0 +1,56 @@
+﻿@model GenericPaginatedEntity<AboutItemVM>
+
+
+<nav aria-label="...">
+    <ul class="pagination">
+        <li class="page-item @(!Model.HasPrev?"disabled":"")">
+            <a class="page-link" href="@Model.Prev" tabindex="-1">Previous</a>
+        </li>
+        @foreach(var pageNumber in Enumerable.Range(1,Model.PageCount))
+        {
+            <li class="page-item @(Model.CurrentPage == pageNumber?"active":"")"><a class="page-link" href="#">@pageNumber</a></li>
+        }
+        <li class="page-item class=" page-item @(!Model.HasNext? "disabled" : "")"">
+            <a class="page-link" href="@Model.Next">Next</a>
+        </li>
+    </ul>
+</nav>
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th scope="col">#</th>
+            <th scope="col">Title</th>
+            <th scope="col">Description</th>
+            <th scope="col">Image</th>
+            <th colspan="2" scope="col">Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (Model.Data != null)
+            @foreach (var item in Model.Data)
+            {
+                <tr class="@(item.IsDeleted?"table-danger":"")">
+                    <th scope="row">@item.Id</th>
+                    <td>@item.Title</td>
+                    <td>@item.Description</td>
+                    <td>
+                        <img height="100" width="100" src="~/aboutimages/@(item.ImageUrl)" />
+                    </td>
+
+                    <td>
+                        @if (item.IsDeleted)
+                        {
+                            <a asp-action="RevokeDelete" asp-route-id="@item.Id" class="btn btn-warning"> RevokeDelete </a>
+                        }
+                        else
+                        {
+                            <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-danger"> Delete </a>
+                        }
+                        <a asp-action="Update" asp-route-id="@item.Id" class="btn btn-success"> Update</a>
+                    </td>
+                </tr>
+            }
+
+    </tbody>
+</table>
